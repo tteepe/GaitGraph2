@@ -1,0 +1,4 @@
+model:
+  tta: False
+data:
+  keypoints: alphapose

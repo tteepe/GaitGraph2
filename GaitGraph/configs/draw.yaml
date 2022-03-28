@@ -1,0 +1,5 @@
+trainer:
+  callbacks:
+    - class_path: GaitGraph.callbacks.DrawActivationCallback
+data:
+  num_workers: 0

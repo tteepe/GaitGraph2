@@ -1,0 +1,7 @@
+pytorch-lightning[extra]
+pytorch-metric-learning
+torch-geometric ~= 2.0.3
+torch
+torchvision
+tqdm
+imageio

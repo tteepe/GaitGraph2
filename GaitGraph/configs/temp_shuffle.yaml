@@ -1,0 +1,6 @@
+model:
+  tta: False
+  multi_input: False
+data:
+  multi_input: False
+  train_shuffle_sequence: True

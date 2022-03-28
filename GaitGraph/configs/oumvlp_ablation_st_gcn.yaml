@@ -1,0 +1,7 @@
+model:
+  backend_name: st-gcn
+  tta: False
+  multi_input: False
+data:
+  keypoints: alphapose
+  multi_input: False

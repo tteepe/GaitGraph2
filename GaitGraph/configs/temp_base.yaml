@@ -1,0 +1,7 @@
+model:
+  tta: False
+  multi_input: False
+data:
+  multi_input: False
+  flip_sequence_p: 0
+  flip_lr_p: 0

@@ -1,0 +1,10 @@
+model:
+  backend_name: resgcn-n51-r4
+  tta: False
+data:
+  keypoints: alphapose
+  flip_sequence_p: 0
+  flip_lr_p: 0
+  joint_noise: 0
+  point_noise: 0
+  random_move: 0

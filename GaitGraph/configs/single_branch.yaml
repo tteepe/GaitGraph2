@@ -1,0 +1,5 @@
+model:
+  multi_input: False
+  tta: False
+data:
+  multi_input: False
