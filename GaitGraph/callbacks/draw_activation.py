@@ -6,6 +6,7 @@ import matplotlib
 from tqdm import tqdm
 import numpy as np
 import torch
+import pytorch_lightning as pl
 from pytorch_lightning import Callback
 from pytorch_lightning.utilities.cli import CALLBACK_REGISTRY
 
@@ -14,7 +15,7 @@ matplotlib.use('Qt5Agg')
 # matplotlib.use('agg')
 
 
-def draw_skeleton(result, points, label, graph, pause=.01, render_gif=True, dpi=96):
+def draw_skeleton(result, points, label, graph, pause=.01, render_gif=True, min_conf=0.025, dpi=96):
     import matplotlib.pyplot as plt
     import matplotlib.cm as cmx
     import matplotlib.colors as colors
@@ -43,26 +44,32 @@ def draw_skeleton(result, points, label, graph, pause=.01, render_gif=True, dpi=
         conf = points[2, t, :]
 
         c = []
+        activation = []
         for v in range(V):
             k = graph.connect_joint[v]
 
-            # Do not plot shit if joint is bad
-            if conf[k] < 5e-3 or conf[v] < 5e-3:
-                c.append([1, 1, 1])
+            r = np.max(result[:, t // 4, v], axis=0)
+            activation.append(r)
+
+            if conf[k] < min_conf or conf[v] < min_conf:
+                c.append([0, 0, 0, 0])
                 continue
 
-            r = np.max(result[:, t // 4, v], axis=0)
             c.append(scalar_map.to_rgba(r))
-            plt.plot([x[v], x[k]], [y[v], y[k]], '-', c=np.array([0.1, 0.1, 0.1]), alpha=0.5, linewidth=2, markersize=0)
+
+            plt.plot([x[v], x[k]], [y[v], y[k]], '-', c=np.array([0.1, 0.1, 0.1]), alpha=0.5, linewidth=3, markersize=0)
 
         if graph.dataset == "oumvlp":
-            plt.plot([x[8], x[11]], [y[8], y[11]], '-', c=np.array([0.1, 0.1, 0.1]), alpha=0.5, linewidth=2,
+            plt.plot([x[8], x[11]], [y[8], y[11]], '-', c=np.array([0.1, 0.1, 0.1]), alpha=0.5, linewidth=3,
                      markersize=0)
         elif graph.dataset == "coco":
-            plt.plot([x[11], x[12]], [y[11], y[12]], '-', c=np.array([0.1, 0.1, 0.1]), alpha=0.5, linewidth=2,
+            plt.plot([x[11], x[12]], [y[11], y[12]], '-', c=np.array([0.1, 0.1, 0.1]), alpha=0.5, linewidth=3,
                      markersize=0)
 
-        plt.scatter(x, y, marker='o', c=c, s=16)
+        c = np.array(c, dtype=np.float)
+        s = np.array(activation, dtype=np.float) * 128.
+        plt.scatter(x, y, marker='o', c=c, s=s, zorder=2.5)
+
         # plt.pause(pause)
         plt.savefig(f"../data/output/{int(label[0])}-{int(label[1])}-{int(label[2])}-{t:03}.pdf")
         plt.savefig(f"../data/output/png/{int(label[0])}-{int(label[1])}-{int(label[2])}-{t:03}.png")
@@ -81,11 +88,11 @@ def draw_skeleton(result, points, label, graph, pause=.01, render_gif=True, dpi=
 
 @CALLBACK_REGISTRY
 class DrawActivationCallback(Callback):
-    def on_predict_epoch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule", outputs: List):
+    def on_predict_epoch_end(self, trainer: pl.Trainer, pl_module: pl.LightningModule, outputs: List):
         weight = pl_module.backbone.fcn.weight.cpu()
 
         num_sequences = sum([o[0].shape[0] for o in outputs[0]])
-        pbar = tqdm(total=num_sequences)
+        pbar = tqdm(total=num_sequences, leave=False)
 
         for output in outputs[0]:
             if len(output) == 6:

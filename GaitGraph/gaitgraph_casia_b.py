@@ -224,6 +224,7 @@ class CASIABPoseModule(pl.LightningDataModule):
             random_move: (float, float) = (3, 1),
             train_shuffle_sequence: bool = False,
             test_shuffle_sequence: bool = False,
+            confidence_noise: float = 0.,
     ):
         super().__init__()
         self.graph = Graph("coco")
