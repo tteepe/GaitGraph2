@@ -2,6 +2,8 @@
 
 Accepted at: [17th IEEE Computer Society Workshop on Biometrics 2022](https://www.vislab.ucr.edu/Biometrics2022/index.php) (CVPRW'22)
 
+[![arxiv](https://img.shields.io/badge/arXiv-2204.07855-red)](https://arxiv.org/abs/2204.07855)
+
 _Previous version:_<br>
 __GaitGraph: Graph Convolutional Network for Skeleton-Based Gait Recognition__ (ICIP'21)<br>
 [![github](https://img.shields.io/badge/Github-GaitGraph-black)](https://github.com/tteepe/GaitGraph)
@@ -54,12 +56,12 @@ Examples:<br>
 If you use GaitGraph2, please use the following BibTeX entry.
 
 ```
-@misc{teepe2021gaitgraph,
-      title={Towards a Deeper Understanding of Skeleton-based Gait Recognition}, 
-      author={Torben Teepe and Johannes Gilg and Fabian Herzog and Stefan H\"ormann and Gerhard Rigoll},
-      year={2022},
-      eprint={2101.11228},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@misc{teepe2022gaitgraph2,
+  doi = {10.48550/ARXIV.2204.07855},
+  url = {https://arxiv.org/abs/2204.07855},
+  author = {Teepe, Torben and Gilg, Johannes and Herzog, Fabian and H\"ormann, Stefan and Rigoll, Gerhard},
+  title = {Towards a Deeper Understanding of Skeleton-based Gait Recognition},
+  publisher = {arXiv},
+  year = {2022}
 }
 ```
